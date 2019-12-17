@@ -63,8 +63,7 @@ int main(int argc, char* argv[]) {
 
         if (strcmp(inbuf, QUIT_STRING) == 0) break;
         else if (makeargv(inbuf, BLANK_STRING, &chargv) > 0 && strcmp(chargv[0], "cd") == 0) {
-            printf("changing target to %s\n", chargv[1]);
-            chdir(chargv[1]);
+            if(chdir(chargv[1])==0)printf("changing target to %s\n", chargv[1]);
         }
         else {
             if (fork() == 0) {
