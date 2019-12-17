@@ -193,8 +193,8 @@ int main() {
     cout << "Press the button:" << endl;
     inputTwo.waitForEdge(&callBackAction);
     inputOne.waitForEdge(&callBackAction);
-    while(totalCount<=10){
-        usleep(5000);
+    while(totalCount<10){
+        usleep(5000000);
         cout<<totalCount<<endl;
     }
     cout<<"Terminated"<<endl;
