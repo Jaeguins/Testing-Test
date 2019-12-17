@@ -36,6 +36,9 @@ public:
     string name, path;
     ofstream stream;
     int exportGPIO();
+    bool threadRunning;
+    CallbackType callbackFunction;
+
 };
 int totalCount=0;
 int callBackAction(){
@@ -60,8 +63,8 @@ GPIO::GPIO(int number) {
 	this->debounceTime = 0;
 	//this->togglePeriod=100;
 	//this->toggleNumber=-1; //infinite number
-	//this->callbackFunction = NULL;
-	//this->threadRunning = false;
+	this->callbackFunction = NULL;
+	this->threadRunning = false;
 
 	ostringstream s;
 	s << "gpio" << number;
