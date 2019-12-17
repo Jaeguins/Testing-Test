@@ -60,16 +60,16 @@ int main(int argc, char* argv[]) {
     for (;;) {
         printf(PROMPT_STRING);
         gets(inbuf);
+
         if (strcmp(inbuf, QUIT_STRING) == 0) break;
+        else if (makeargv(inbuf, BLANK_STRING, &chargv) > 0 && strcmp(chargv[0], "cd") == 0) {
+            printf("changing target to %s\n", chargv[1]);
+            chdir(chargv[1]);
+        }
         else {
             if (fork() == 0) {
                 if (makeargv(inbuf, BLANK_STRING, &chargv) > 0) {
-                    if(strcmp(chargv[0],"cd")==0){
-                        chdir(chargv[1]);
-                    }else{
-                        execvp(chargv[0], chargv);
-                    }
-                    
+                    execvp(chargv[0], chargv);
                     printf("%s: command not found.", chargv[0]);
                 }
                 exit(1);
