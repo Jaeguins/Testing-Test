@@ -48,7 +48,7 @@ int callBackAction(int index){
     totalCount+=1;
     if(totalCount==10){
         cout<<"Terminated"<<endl;
-        exit();
+        exit(0);
     }
     return 0;
 }

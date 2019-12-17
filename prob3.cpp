@@ -20,7 +20,7 @@ void callBackAction(void){
     totalCount+=1;
     if(totalCount==10){
         cout<<"Terminated"<<endl;
-        exit();
+        exit(0);
     }
         
 }
