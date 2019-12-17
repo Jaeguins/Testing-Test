@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
                     }
                     printf("--\n");
                     if(strcmp(chargv[0],"cd")==0){
-                        int chdir(chargv);
+                        chdir(chargv[1]);
                     }
                     execvp(chargv[0], chargv);
                     printf("%s: command not found.", chargv[0]);
