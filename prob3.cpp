@@ -10,8 +10,8 @@
 #include<pthread.h>
 #include <wiringPi.h>
 #define GPIO_PATH "/sys/class/gpio/"
-#define BUTTTON_ONE 17
-#define BUTTTON_TWO 27
+#define BUTTON_ONE 17
+#define BUTTON_TWO 27
 using namespace std;
 
 int totalCount=0;
@@ -22,7 +22,7 @@ void callBackAction(void){
 
 int main() {
     wiringPiSetupGpio();
-    pinMode(BUTTTON_ONE,INPUT);
+    pinMode(BUTTON_ONE,INPUT);
     pinMode(BUTTON_TWO,INPUT);
     
     cout << "Press the button:" << endl;
