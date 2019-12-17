@@ -27,6 +27,7 @@ public:
     virtual int setEdgeType(GPIO_EDGE);
     virtual int streamOpen();
     virtual int waitForEdge();
+    virtual int  waitForEdge(CallbackType callback);
     virtual int streamWrite(GPIO_VALUE);
     virtual int streamClose();
     int write(string path, string filename, string value);
@@ -36,21 +37,29 @@ public:
     ofstream stream;
     int exportGPIO();
 };
-
+int totalCount=0;
 int main() {
-    GPIO outGPIO(17), inGPIO(27);
-    inGPIO.setDirection(INPUT);
-    outGPIO.setDirection(OUTPUT);
-    inGPIO.setEdgeType(RISING);
-    outGPIO.streamOpen();
-    outGPIO.streamWrite(LOW);
+    GPIO inputOne(17), inputTwo(27);
+    inputTwo.setDirection(INPUT);
+    inputOne.setDirection(INPUT);
+    inputTwo.setEdgeType(RISING);
+    inputOne.setEdgeType(RISING);
+    
     cout << "Press the button:" << endl;
-    inGPIO.waitForEdge();
-    outGPIO.streamWrite(HIGH);
-    outGPIO.streamClose();
+    inputTwo.waitForEdge(&callBackAction);
+    inputOne.waitForEdge(&callBackAction);
+    while(totalCount<=10){
+        usleep(5000);
+        cout<<totalCount<<endl;
+    }
+    cout<<"Terminated"<<endl;
     return 0;
 }
 
+int callBackAction(){
+    cout<<"Button Pressed."<<endl;
+    totalCount+=1;
+}
 
 int GPIO::setDirection(GPIO_DIRECTION dir) {
     switch (dir) {
@@ -163,4 +172,16 @@ int GPIO::write(string path, string filename, int value){
    stringstream s;
    s << value;
    return this->write(path,filename,s.str());
+}
+
+int GPIO::waitForEdge(CallbackType callback){
+	this->threadRunning = true;
+	this->callbackFunction = callback;
+    // create the thread, pass the reference, address of the function and data
+    if(pthread_create(&this->thread, NULL, &threadedPoll, static_cast<void*>(this))){
+    	perror("GPIO: Failed to create the poll thread");
+    	this->threadRunning = false;
+    	return -1;
+    }
+    return 0;
 }
