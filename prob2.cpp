@@ -37,8 +37,10 @@ public:
     ofstream stream;
     int exportGPIO();
     bool threadRunning;
+    pthread_t thread;
     CallbackType callbackFunction;
-
+    friend void* threadedPoll(void *value);
+	friend void* threadedToggle(void *value);
 };
 int totalCount=0;
 int callBackAction(){
