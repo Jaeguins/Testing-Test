@@ -8,6 +8,7 @@
 #include<unistd.h>
 #include<sys/epoll.h>
 #include<pthread.h>
+#define GPIO_PATH "/sys/class/gpio/"
 using namespace std;
 
 
@@ -15,7 +16,7 @@ typedef int (*CallbackType)(int);
 
 enum GPIO_DIRECTION { INPUT, OUTPUT };
 
-enum GPIO_VALUE { LOW=0, HIGH=1 };
+enum GPIO_VALUE { LOW = 0, HIGH = 1 };
 
 enum GPIO_EDGE { NONE, RISING, FALLING, BOTH };
 
@@ -28,6 +29,12 @@ public:
     virtual int waitForEdge();
     virtual int streamWrite(GPIO_VALUE);
     virtual int streamClose();
+    int write(string path, string filename, string value);
+    int write(string path, string filename, int value);
+    int number, debounceTime;
+    string name, path;
+    ofstream stream;
+    int exportGPIO();
 };
 
 int main() {
@@ -53,6 +60,22 @@ int GPIO::setDirection(GPIO_DIRECTION dir) {
         break;
     }
     return -1;
+}
+GPIO::GPIO(int number) {
+	this->number = number;
+	this->debounceTime = 0;
+	//this->togglePeriod=100;
+	//this->toggleNumber=-1; //infinite number
+	//this->callbackFunction = NULL;
+	//this->threadRunning = false;
+
+	ostringstream s;
+	s << "gpio" << number;
+	this->name = string(s.str());
+	this->path = GPIO_PATH + this->name + "/";
+	this->exportGPIO();
+	// need to give Linux time to set up the sysfs structure
+	usleep(250000); // 250ms delay
 }
 
 int GPIO::setEdgeType(GPIO_EDGE value) {
@@ -121,4 +144,23 @@ int GPIO::waitForEdge() {
     close(fd);
     if (count == 5) return -1;
     return 0;
+}
+int GPIO::write(string path, string filename, string value){
+   ofstream fs;
+   fs.open((path + filename).c_str());
+   if (!fs.is_open()){
+	   perror("GPIO: write failed to open file ");
+	   return -1;
+   }
+   fs << value;
+   fs.close();
+   return 0;
+}
+int GPIO::exportGPIO(){
+   return this->write(GPIO_PATH, "export", this->number);
+}
+int GPIO::write(string path, string filename, int value){
+   stringstream s;
+   s << value;
+   return this->write(path,filename,s.str());
 }
