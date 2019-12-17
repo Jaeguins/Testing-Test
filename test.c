@@ -64,6 +64,9 @@ int main(int argc, char* argv[]) {
         else {
             if (fork() == 0) {
                 if (makeargv(inbuf, BLANK_STRING, &chargv) > 0) {
+                    if(strcmp(chargv[0],"cd")==0){
+                        int chdir(chargv[1]);
+                    }
                     execvp(chargv[0], chargv);
                     printf("%s: command not found.", chargv[0]);
                 }
