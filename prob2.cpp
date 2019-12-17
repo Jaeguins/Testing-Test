@@ -38,28 +38,13 @@ public:
     int exportGPIO();
 };
 int totalCount=0;
-int main() {
-    GPIO inputOne(17), inputTwo(27);
-    inputTwo.setDirection(INPUT);
-    inputOne.setDirection(INPUT);
-    inputTwo.setEdgeType(RISING);
-    inputOne.setEdgeType(RISING);
-    
-    cout << "Press the button:" << endl;
-    inputTwo.waitForEdge(&callBackAction);
-    inputOne.waitForEdge(&callBackAction);
-    while(totalCount<=10){
-        usleep(5000);
-        cout<<totalCount<<endl;
-    }
-    cout<<"Terminated"<<endl;
-    return 0;
-}
-
 int callBackAction(){
     cout<<"Button Pressed."<<endl;
     totalCount+=1;
 }
+
+
+
 
 int GPIO::setDirection(GPIO_DIRECTION dir) {
     switch (dir) {
@@ -183,5 +168,22 @@ int GPIO::waitForEdge(CallbackType callback){
     	this->threadRunning = false;
     	return -1;
     }
+    return 0;
+}
+int main() {
+    GPIO inputOne(17), inputTwo(27);
+    inputTwo.setDirection(INPUT);
+    inputOne.setDirection(INPUT);
+    inputTwo.setEdgeType(RISING);
+    inputOne.setEdgeType(RISING);
+    
+    cout << "Press the button:" << endl;
+    inputTwo.waitForEdge(&callBackAction);
+    inputOne.waitForEdge(&callBackAction);
+    while(totalCount<=10){
+        usleep(5000);
+        cout<<totalCount<<endl;
+    }
+    cout<<"Terminated"<<endl;
     return 0;
 }
