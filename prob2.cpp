@@ -46,6 +46,10 @@ int totalCount=0;
 int callBackAction(int index){
     cout<<"Button Pressed."<<endl;
     totalCount+=1;
+    if(totalCount==10){
+        cout<<"Terminated"<<endl;
+        exit();
+    }
     return 0;
 }
 

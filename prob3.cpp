@@ -18,6 +18,11 @@ int totalCount=0;
 void callBackAction(void){
     cout<<"Button Pressed."<<endl;
     totalCount+=1;
+    if(totalCount==10){
+        cout<<"Terminated"<<endl;
+        exit();
+    }
+        
 }
 
 int main() {
@@ -32,6 +37,6 @@ int main() {
         usleep(5000000);
         cout<<totalCount<<endl;
     }
-    cout<<"Terminated"<<endl;
+    
     return 0;
 }
