@@ -64,15 +64,12 @@ int main(int argc, char* argv[]) {
         else {
             if (fork() == 0) {
                 if (makeargv(inbuf, BLANK_STRING, &chargv) > 0) {
-                    printf("--\n");
-                    for(int i=0;i<sizeof(chargv);i++){
-                        printf("%s\n",chargv[i]);
-                    }
-                    printf("--\n");
                     if(strcmp(chargv[0],"cd")==0){
                         chdir(chargv[1]);
+                    }else{
+                        execvp(chargv[0], chargv);
                     }
-                    execvp(chargv[0], chargv);
+                    
                     printf("%s: command not found.", chargv[0]);
                 }
                 exit(1);
