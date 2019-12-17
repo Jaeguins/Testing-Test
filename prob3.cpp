@@ -18,7 +18,6 @@ int totalCount=0;
 void callBackAction(void){
     cout<<"Button Pressed."<<endl;
     totalCount+=1;
-    return 0;
 }
 
 int main() {
