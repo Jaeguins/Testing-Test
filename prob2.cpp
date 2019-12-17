@@ -43,12 +43,20 @@ public:
 	friend void* threadedToggle(void *value);
 };
 int totalCount=0;
-int callBackAction(){
+int callBackAction(int index){
     cout<<"Button Pressed."<<endl;
     totalCount+=1;
+    return 0;
 }
 
-
+void* threadedPoll(void *value){
+	GPIO *gpio = static_cast<GPIO*>(value);
+	while(gpio->threadRunning){
+		gpio->callbackFunction(gpio->waitForEdge());
+		usleep(gpio->debounceTime * 1000);
+	}
+	return 0;
+}
 
 
 int GPIO::setDirection(GPIO_DIRECTION dir) {
